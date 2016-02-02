@@ -23,11 +23,11 @@ cd $reads_folder
 
 for F in *trimmed; do
   cd $F
-  echo $F > $output_folder"/${F}_stats.txt"
+  echo $F > $output_folder/${F}_stats.txt
   report_file="$(ls *report.txt -1)"
-  grep "reads processed" $report_file | grep -o '[0-9]\+' >> $output_folder"/${F}_stats.txt"
-  grep "Total written (filtered)" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder"/${F}_stats.txt"
-  grep "Sequences removed" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder"/${F}_stats.txt"
+  grep "reads processed" $report_file | grep -o '[0-9]\+' >> $output_folder/${F}_stats.txt
+  grep "Total written (filtered)" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder/${F}_stats.txt
+  grep "Sequences removed" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder/${F}_stats.txt
   cd $reads_folder
 done
 
