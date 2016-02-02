@@ -1,0 +1,34 @@
+#!/bin/bash
+
+#PBS -q gerstein -Wgroup_list=gerstein
+#PBS -m abe -M brian.barron@yale.edu
+#PBS -l nodes=1:ppn=8
+
+#####
+#	TrimReads_PairedEnd.pbs - This script will trim paired-end data (paired end-mode with quality cutoff at 20)
+#####
+
+#Assign the data folder (where raw reads  are) and output folder (where trimmed reads will be stored)
+data_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_CellComp/Raw_Data2/Paired_End"
+output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_CellComp/Trimmed_Data2/Paired_End"
+
+#Change WD to that containing the data
+cd $data_folder
+
+#Initialize for loop "F" to detect sample folders
+for F in Sample_BkSQ*; do
+
+	#Change WD to that of the sample folder and create output file for trimmed reads
+	cd $F
+	out_dir=$output_folder"/"$F"_trimmed";
+	mkdir $out_dir
+
+	#Detect reads and run trim_galore
+	
+	read1="$(ls *R1*gz -1)";
+	read2="$(ls *R2*gz -1)";
+	trim_galore --paired $read1 $read2 -q 20 --output_dir $out_dir --gzip
+
+	#Return to data folder directory for next sample
+	cd $data_folder
+done
