@@ -2,7 +2,7 @@
 
 #PBS -q gerstein -Wgroup_list=gerstein
 #PBS -m abe -M brian.barron@yale.edu
-#PBS -l nodes=1:ppn=8
+#PBS -l nodes=1:ppn=8 -W PARTITION:m610
 
 #####
 #	TrimReads_SingleEnd.pbs - This script will trim single-end reads using Trim_Galore (single end-mode with quality cutoff at 20)
@@ -24,7 +24,6 @@ for F in Sample*; do
 	mkdir $out_dir
 
 	#Detect read and run trim_galore
-	
 	read1="$(ls *R1*gz -1)";
 	trim_galore --quality 20 --output_dir $out_dir --gzip $read1
 
