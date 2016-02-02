@@ -13,10 +13,11 @@
 #Assign the data folder (where raw reads  are) and output folder (where trimmed reads will be stored)
 alignment_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Aligned_Reads/Single_End"
 output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Alignment_Data/Single_End"
-
-cd $alignment_folder
+mkdir $output_folder
 
 #Initiate for loop F to detect sample folders and extract relevant info (name, # reads, % unique map to genome, % map to transcriptome, and % unique map to transcriptome)
+cd $alignment_folder
+
 for F in BrainSpan*aligned; do
   cd $F
   echo $F >> $output_folder/{$F}_stats.txt
@@ -43,15 +44,28 @@ done
 #Assign the data folder (where raw reads  are) and output folder (where trimmed reads will be stored)
 alignment_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Aligned_Reads/Paired_End"
 output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Alignment_Data/Paired_End"
+mkdir $output_folder
 
+#Initiate for loop F to detect sample folders and extract relevant info (name, # reads, % unique map to genome, % map to transcriptome, and % unique map to transcriptome)
 cd $alignment_folder
 for F in *aligned; do
   cd $F
-  echo $F >> $output_folder/{$F}.txt
-  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' > $output_folder/{$F}.txt
-  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' > $output_folder/{$F}.txt
-  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}.txt
-  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}.txt
+  echo $F >> $output_folder/{$F}_stats.txt
+  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' > $output_folder/{$F}_stats.txt
+  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' > $output_folder/{$F}_stats.txt
+  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
+  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
   cd $alignment_folder
 done
 
+#Combine Alignment Data into one large file (called Alignment_Statistics)
+output_file=$output_folder"/Alignment_Statistics.txt"
+touch $output_file
+
+cd $output_folder
+
+for S in *stats.txt; do 
+	cut -f 1 "./"$S | paste $output_file - > dummy.txt
+	rm ./$output_file
+	mv ./dummy.txt ./$output_file
+done
