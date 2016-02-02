@@ -19,3 +19,7 @@ for F in BrainSpan*aligned; do
   cd $F
   echo $F >> $output_folder/{$F}.txt
   cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' > $output_folder/{$F}.txt
+  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' > $output_folder/{$F}.txt
+  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}.txt
+  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}.txt
+  
