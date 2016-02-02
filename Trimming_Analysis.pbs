@@ -10,13 +10,32 @@
 
 #####Single End Analysis
 
-#Declare variables for reads_folder (where trimmed reads are) and output_folder (where analysis will go)
+#Declare variables for reads_folder (where trimmed reads are), output_folder (where analysis will go), and output_file (analysis file)
 reads_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Trimmed_Reads/Single_End"
 output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Trimmed_Analysis/Single_End"
-mkdir 
+output_file=$output_folder"/Trim_Analysis.txt"
+
+mkdir $output_folder
+touch $output_file
 
 #Move WD to that directory containing the trimmed reads and initialize for loop "F" to detect read samples and extract relevant info
+cd $reads_folder
+
 for F in *trimmed; do
   cd $F
+  echo $F > $output_folder"/${F}_stats.txt"
   report_file="$(ls *report.txt -1)"
-  
+  grep "reads processed" $report_file | grep -o '[0-9]\+' >> $output_folder"/${F}_stats.txt"
+  grep "Total written (filtered)" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder"/${F}_stats.txt"
+  grep "Sequences removed" $report_file | grep -o '([0-9]\+.\+%)' | grep -o '[0-9]\+.\+%' >> $output_folder"/${F}_stats.txt"
+  cd $reads_folder
+done
+
+#Create a single file by combining the others
+cd $output_folder
+
+for S in *stats.txt; do
+        cut -f 1 "./"$S | paste $output_file - > dummy.txt
+        rm $output_file
+        mv ./dummy.txt $output_file
+done
