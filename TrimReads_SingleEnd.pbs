@@ -1,0 +1,33 @@
+#!/bin/bash
+
+#PBS -q gerstein -Wgroup_list=gerstein
+#PBS -m abe -M brian.barron@yale.edu
+#PBS -l nodes=1:ppn=8
+
+#####
+#	TrimReads_SingleEnd.pbs - This script will trim single-end reads using Trim_Galore (single end-mode with quality cutoff at 20)
+#####
+
+#Assign the data folder (where raw reads are) and and output folder (where trimmed reads will be stored)
+data_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_CellComp/Raw_Data2/Single_End"
+output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_CellComp/Trimmed_Data2/Single_End"
+
+#Change WD to that containing the raw reads
+cd $data_folder
+
+#Initialize for loop "F" to detect sample folders
+for F in Sample*; do
+
+	#Change WD to that of the sample folder and create output file
+	cd $F
+	out_dir=$output_folder"/"$F"_trimmed";
+	mkdir $out_dir
+
+	#Detect read and run trim_galore
+	
+	read1="$(ls *R1*gz -1)";
+	trim_galore --quality 20 --output_dir $out_dir --gzip $read1
+
+	#Return to data folder directory for next sample
+	cd $data_folder
+done
