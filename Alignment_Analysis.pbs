@@ -69,6 +69,6 @@ cd $output_folder
 
 for S in *stats.txt; do 
 	cut -f 1 "./"$S | paste $output_file - > dummy.txt
-	rm ./$output_file
-	mv ./dummy.txt ./$output_file
+	rm $output_file
+	mv ./dummy.txt $output_file
 done
