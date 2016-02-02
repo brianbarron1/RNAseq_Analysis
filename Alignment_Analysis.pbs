@@ -22,17 +22,18 @@ cd $alignment_folder
 
 for F in BrainSpan*aligned; do
   cd $F
-  echo $F >> $output_folder/{$F}_stats.txt
-  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' > $output_folder/{$F}_stats.txt
-  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' > $output_folder/{$F}_stats.txt
-  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
-  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
+  echo $F > $output_folder/${F}_stats.txt
+  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' >> $output_folder/${F}_stats.txt
+  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' >> $output_folder/${F}_stats.txt
+  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l >> $output_folder/${F}_stats.txt
+  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l >> $output_folder/${F}_stats.txt
   cd $alignment_folder
 done
 
 #Combine Alignment Data into one large file (called Alignment_Statistics)
-touch $output_folder/Alignment_Statistics.txt
 output_file=$output_folder"/Alignment_Statistics.txt"
+touch $output_file
+
 cd $output_folder
 
 for S in *stats.txt; do 
@@ -52,11 +53,11 @@ mkdir $output_folder
 cd $alignment_folder
 for F in *aligned; do
   cd $F
-  echo $F >> $output_folder/{$F}_stats.txt
-  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' > $output_folder/{$F}_stats.txt
-  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' > $output_folder/{$F}_stats.txt
-  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
-  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l > $output_folder/{$F}_stats.txt
+  echo $F > $output_folder/${F}_stats.txt
+  cat Log.final.out | grep "input reads" | grep -o '[0-9]\+' >> $output_folder/${F}_stats.txt
+  cat Log.final.out | grep "mapped reads %" | grep -o '[0-9]\+.\+' >> $output_folder/${F}_stats.txt
+  samtools view -F4 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l >> $output_folder/${F}_stats.txt
+  samtools view -F4 -q255 Aligned.toTranscriptome.out.bam | cut -f 1 | sort -T /gpfs/scratch/fas/gerstein/ky26/ky26_brian/Temporary_Data_Folder | uniq | wc -l >> $output_folder/${F}_stats.txt
   cd $alignment_folder
 done
 
