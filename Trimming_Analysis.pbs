@@ -1,0 +1,22 @@
+#!/bin/bash
+
+#PBS -q gerstein -Wgroup_list=gerstein
+#PBS -m abe -M brian.barron@yale.edu
+#PBS -l nodes=1:ppn=8 -W PARTITION:m610
+
+#####
+#	Trimming_Analysis.pbs - This script will gather relevant info from read trimmed files
+#####
+
+#####Single End Analysis
+
+#Declare variables for reads_folder (where trimmed reads are) and output_folder (where analysis will go)
+reads_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Trimmed_Reads/Single_End"
+output_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Trimmed_Analysis/Single_End"
+mkdir 
+
+#Move WD to that directory containing the trimmed reads and initialize for loop "F" to detect read samples and extract relevant info
+for F in *trimmed; do
+  cd $F
+  report_file="$(ls *report.txt -1)"
+  
