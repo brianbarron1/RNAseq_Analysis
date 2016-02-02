@@ -8,7 +8,9 @@
 #	Alignment_Analysis.pbs - This script will gather relevant info from alignment files
 #####
 
-#####Single End Analysis
+##### NOTE: Choose only one of the below options for either (1) Single-End or (2) Paired-End Reads
+
+##### (1)Single End Analysis
 
 #Assign the data folder (where raw reads  are) and output folder (where trimmed reads will be stored)
 alignment_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Aligned_Reads/Single_End"
@@ -39,7 +41,7 @@ for S in *stats.txt; do
 	mv ./dummy.txt ./$output_file
 done
 	
-#####Paired End Analysis
+##### (2)Paired End Analysis
 
 #Assign the data folder (where raw reads  are) and output folder (where trimmed reads will be stored)
 alignment_folder="/gpfs/scratch/fas/gerstein/ky26/ky26_brian/Chupp_RNA-seq_Controls/Aligned_Reads/Paired_End"
