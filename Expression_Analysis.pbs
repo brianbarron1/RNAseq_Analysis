@@ -18,17 +18,19 @@ cd $expression_folder
 
 for F in *aligned; do
   cd $F
-  echo $F > $output_folder/${F}_stats.txt
-  cut -f 6 Quant.genes.results | grep '[1-9]\+' | wc -l >> $output_folder/${F}_stats.txt
+  #echo $F > $output_folder/${F}_stats.txt
+  #cut -f 6 Quant.genes.results | grep '[1-9]\+' | wc -l >> $output_folder/${F}_stats.txt
+  echo $F > $output_folder/${F}_name.txt
+  cut -f 6 Quant.genes.results > $output_folder/${F}_tpm.txt 
   cd $expression_folder
 done
 
 #Combine files into one large file
 cd $output_folder
 
-output_file=$output_folder"/Expression_Analysis.txt"
-touch $output_file
+expression_file=$output_folder"/Expression_Analysis.txt"
+touch $expression_file
 
 for S in *stats.txt; do
-  cut -f 1 $S | paste $output_file - > $output_file
+  cut -f 1 $S | paste $expression_file - > $expression_file
 done
