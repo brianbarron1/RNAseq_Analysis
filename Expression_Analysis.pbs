@@ -25,7 +25,7 @@ for F in *aligned; do
   cd $expression_folder
 done
 
-#Combine files into one large file
+#Combine TPM data into one large file
 cd $output_folder
 
 expression_file=$output_folder"/Expression_Analysis.txt"
@@ -35,4 +35,14 @@ for S in *tpm.txt; do
   cut -f 1 $S | paste $expression_file - > dummy.txt
 	rm $expression_file
 	mv ./dummy.txt $expression_file
+done
+
+#Combine names into one large file
+name_file=$output_folder"/Sample_Names.txt"
+touch $name_file
+
+for T in *name.txt; do
+        cut -f 1 $T | paste $name_file - > dummy.txt
+        rm $name_file
+        mv ./dummy.txt $name_file
 done
