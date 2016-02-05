@@ -31,6 +31,6 @@ cd $output_folder
 expression_file=$output_folder"/Expression_Analysis.txt"
 touch $expression_file
 
-for S in *stats.txt; do
+for S in *tpm.txt; do
   cut -f 1 $S | paste $expression_file - > $expression_file
 done
